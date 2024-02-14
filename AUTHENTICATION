@@ -1,0 +1,158 @@
+							
+								AUTH-LAB01:
+						Username enumeration via different responses
+								
+ This lab is vulnerable to username enumeration and password brute-force attacks. It has an account with a predictable username and password, which can be found in the following wordlists:
+
+    Candidate usernames
+    Candidate passwords
+
+To solve the lab, enumerate a valid username, brute-force this user's password, then access their account page. 
+
+Solution:-
+
+1) First we need to connect the site with proxy server uisng burpsuite and foxyproxy.
+2) Then we have to go to My account and enter random username and password and send the query to intruder.
+3) In intruder select random username you entered and $Add it after that copy all the usernames given in the exercise and paste it and start the normal attack.
+4) Onc ewe find the different length for the username that is the username.
+5) After that we need to enter username as same we found and then add random password to $Add and do the same.
+6) Once we receive 302 error code we have retreived the password and now we can login using username and password.
+
+**********************************************************
+
+
+								AUTH-LAB02:
+							     2FA simple bypass
+
+ This lab's two-factor authentication can be bypassed. You have already obtained a valid username and password, but do not have access to the user's 2FA verification code. To solve the lab, access Carlos's account page.
+
+    Your credentials: wiener:peter
+    Victim's credentials carlos:montoya
+    
+ Solution: 
+ 
+ 1) First we need to access the site through burpsuite and foxyproxy.
+ 2) Then we need to sign in into my account using given username and password.
+ 3) Then again we need to connect to the interceptor and try login using given username and password.
+ 4) In URL we need to type my-account in place of login2 and drop the request from inceptor and turn off the interceptor.
+ 5) We have succesfully completed the Lab.
+ 
+ *********************************************************
+
+								AUTH-LAB03:
+						   Password reset broken logic
+
+ This lab's password reset functionality is vulnerable. To solve the lab, reset Carlos's password then log in and access his "My account" page.
+
+    Your credentials: wiener:peter
+    Victim's username: carlos
+
+Solution: 
+
+1) First we need to access the site through burpsuite and foxyproxy.
+2) then we need togo to my account --> forgot password , then send this request to repeater.
+3) Then enter the new password in the site and again send the request to repeater.
+4) change the token_id as x because they both are same so we can try changing the token_id and enter the name to the username we want to hack the password.
+5) In burpsuite we need to send the request using repeater and the forward the query and use my account section to login using given user.
+
+******************************************************
+
+
+								AUTH -LAB04:
+						Username enumeration via subtly different responses
+						
+ This lab is subtly vulnerable to username enumeration and password brute-force attacks. It has an account with a predictable username and password, which can be found in the following wordlists:
+
+    Candidate usernames
+    Candidate passwords
+
+To solve the lab, enumerate a valid username, brute-force this user's password, then access their account page. 
+
+Solution:
+
+1) First we need to access the site through burpsuite and foxyproxy.
+2) In my account section try using random username and password and sent the request to repeater and then to intruder.
+3) In intruder $Add to the username and copy all the usernames provided in the exercise.
+4) It is hard to find the error, SO here the error was differentiate with one fullstop.
+5) Error --> invalid username and password and for others --> invalid username and password.
+6) after finidng username $Add password and copy all passwords provided to intruder and then login to my account.
+
+*******************************************************
+
+
+
+								AUTH -LAB05:
+						Username enumeration via response timing
+					
+ This lab is vulnerable to username enumeration using its response times. To solve the lab, enumerate a valid username, brute-force this user's password, then access their account page.
+
+    Your credentials: wiener:peter
+    Candidate usernames
+    Candidate passwords
+
+Solution:
+1) First we need to access the site through burpsuite and foxyproxy.
+2) In my account section try using random username and long password as long password will take long time to execute and use known user as I used now wiener which is available in database and sent the request to repeater and then to intruder.
+3) Add one command in the repeater query i.e. X-Forwarded-For: 888(This can be any random number you want but choose larger number to avoid collision).
+4) In intruder $Add to the username and copy all the usernames provided in the exercise and also $Add to X-Forwarded number and choose attack as PITCHFORK.
+5) In Payload1 : Numbers, From: 105 To: 205, Step: 1. Payload2: Simple List and pass the usernames that are provided and then start attack.
+6) We will find valid user whose response time should be greater than everyone.
+7) For the password same procedure as above just clear usernames and add passwords.
+8) While login into my-account again connect proxy and add X-forwarded and username password and use forward button to solve the Lab.
+
+*********************************************************
+
+
+								AUTH -LAB06:
+						Broken brute-force protection, IP block
+						
+ This lab is vulnerable due to a logic flaw in its password brute-force protection. To solve the lab, brute-force the victim's password, then log in and access their account page.
+
+    Your credentials: wiener:peter
+    Victim's username: carlos
+    Candidate passwords
+
+Solution:
+
+1) First we need to access the site through burpsuite and foxyproxy.
+2) In my account section try using random username and password and sent the request to repeater and then to intruder.
+
+For this solution we need to script some part in PYTHON because it will take a lot time if we try same thing with INTRUDER, because after 2 failed login attempts we get timeout for 1 minute. 
+For this the solution is to login using real id and pass for the third time which will save time also and will receive no errors.
+
+PYTHON SCRIPT:
+print('Following are the usernames:')
+
+for i in range(150):
+    if i % 3:
+        print('carlos')
+    else:
+        print('wiener')
+
+
+print('Following are the passwords:')
+
+with open('password.txt', 'r') as f:
+    lines = f.readlines()
+
+i = 0
+
+for pwd in lines:
+    if i % 3:
+        print(pwd.strip('\n'))
+    else:
+        print('peter')
+        print(pwd.strip('\n'))
+        i = i + 1
+    i = i + 1
+    
+3) After running this script we will receive the 150 usernames and 150 passwords we need to copy them and paste them in the intruder and select type as PITCHFORK.
+4) For range we are taking 150 because 100 are test case and 50 are the real id and pass.
+5) We will receieve 302 error for carlos so try login using id and pass and lab should be solved.
+
+
+								
+
+
+
+
