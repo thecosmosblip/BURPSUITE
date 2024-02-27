@@ -49,6 +49,54 @@ Solution:
 
 **************************************************************
 
+DT-LAB04:
+					File path traversal, traversal sequences stripped with superfluous URL-decode
+					
+ This lab contains a path traversal vulnerability in the display of product images.
+
+The application blocks input containing path traversal sequences. It then performs a URL-decode of the input before using it.
+
+To solve the lab, retrieve the contents of the /etc/passwd file. 
+
+Solution:
+
+1) We need to do same steps.
+2) enter the command ../../../../etc/passwd and right click and convert selection --> url encode all 2 times and do http1.1.
+
+****************************************************************
+
+									DT-LAB05:
+						 	File path traversal, validation of start of path
+						 	
+ This lab contains a path traversal vulnerability in the display of product images.
+
+The application transmits the full file path via a request parameter, and validates that the supplied path starts with the expected folder.
+
+To solve the lab, retrieve the contents of the /etc/passwd file. 
+
+Solution:
+
+1) We need to access the /etc/passwd directory for the user.
+2) we need to send one image request to the repeater and their path is filename=/var/www/images/34.jpg so we just need to go out of this path.
+3) /var/www/images/../../../etc/passwd by using this command we get the access to the /etc/passwd folder and lab is solved.
+
+**************************************************************
+
+									DT-LAB06:
+						File path traversal, validation of file extension with null byte bypass
+						
+ This lab contains a path traversal vulnerability in the display of product images.
+
+The application validates that the supplied filename ends with the expected file extension.
+
+To solve the lab, retrieve the contents of the /etc/passwd file. 
+
+Solution:
+
+1) We need to do same process as before, if any of the first five steps didnt work then we need to try this step.
+2) use filename=../../../etc/passwd%0070.jpg this command as %00 ignore the command written after that.
+3) All the labs for the DIRECTORY TRAVERSAL are completed.
+
 
 
 
