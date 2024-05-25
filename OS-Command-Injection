@@ -1,0 +1,92 @@
+
+									   OS-LAB01:
+								OS command injection, simple case
+								
+ This lab contains an OS command injection vulnerability in the product stock checker.
+
+The application executes a shell command containing user-supplied product and store IDs, and returns the raw output from the command in its response.
+
+To solve the lab, execute the whoami command to determine the name of the current user.
+
+Solution:
+
+1) In the Lab select one product and select how much stocks left and go to http history in the burpsuite.
+2) Send this http history to repeater and in the product id and store id command section add --> productId=2 &whoami # &storeId=1 and do ctrl + U.
+3) Then we receive the user name in the output.
+
+***************************************************************
+
+									OS-LAB02:
+							Blind OS command injection with time delays
+							
+ This lab contains a blind OS command injection vulnerability in the feedback function.
+
+The application executes a shell command containing the user-supplied details. The output from the command is not returned in the response.
+
+To solve the lab, exploit the blind OS command injection vulnerability to cause a 10 second delay. 
+
+Solution:
+
+1) In the lab we need to go to send feedback tab and send a feedbackand send that request to the repeater.
+2) use command & sleep 10 & to get the blind injection .i.e. csrf=pJfHLHMnVEtUPuiJS86Je0JdTUxvnfMe&name=test&email=test%40test.ca & sleep 10 # &subject=test&message=test.
+3) use this command in every field .i.e name, email and do ctrl + U to the command.
+4) While using this command if this takes 10 seconds then it is vulnerable to blind os injection.
+
+***************************************************************		
+
+									OS-LAB03:
+						    Blind OS command injection with output redirection		
+					    
+ This lab contains a blind OS command injection vulnerability in the feedback function.
+
+The application executes a shell command containing the user-supplied details. The output from the command is not returned in the response. However, you can use output redirection to capture the output from the command. There is a writable folder at:
+/var/www/images/
+
+The application serves the images for the product catalog from this location. You can redirect the output from the injected command to a file in this folder, and then use the image loading URL to retrieve the contents of the file.
+
+To solve the lab, execute the whoami command and retrieve the output. 
+
+Solution:
+
+1) we need to do same step as blind injection just change command use & whoami > /var/www/images/file.txt #.
+2) send one image request to the repeater and in filename write the file.txt i.e. filename = file.txt.
+3) If we receive the output at the screen with the username name the lab is completed.
+
+*******************************************************
+
+									OS-LAB04:
+						  Blind OS command injection with out-of-band interaction
+						  
+ This lab contains a blind OS command injection vulnerability in the feedback function.
+
+The application executes a shell command containing the user-supplied details. The command is executed asynchronously and has no effect on the application's response. It is not possible to redirect output into a location that you can access. However, you can trigger out-of-band interactions with an external domain.
+
+To solve the lab, exploit the blind OS command injection vulnerability to issue a DNS lookup to Burp Collaborator.
+Note
+
+To prevent the Academy platform being used to attack third parties, our firewall blocks interactions between the labs and arbitrary external systems. To solve the lab, you must use Burp Collaborator's default public server.
+
+
+Solution:
+
+1) This is performed on professional version of burpsuite so I have not solved the exercise.
+2) We need to do same as before just copy the clipboard from burp collaborator and paste in between in email field in feedback.
+3) send the request and poll now in burp collaborator and the exercise is cleared.
+
+*******************************************************
+
+
+
+
+
+
+
+
+						    
+						    
+						    
+						    
+						    
+						    
+						    
+						    
