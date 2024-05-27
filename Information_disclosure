@@ -1,0 +1,100 @@
+
+									INFORMATION DISCOLSURE
+										
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\///////////////////////////////////////////////////////////////////////////////////////
+
+								Lab01: Information disclosure in error messages 
+								
+This lab's verbose error messages reveal that it is using a vulnerable version of a third-party framework. To solve the lab, obtain and submit the version number of this framework. 
+
+Solution: 
+
+1) First we need to start the lab and select one product.
+2) Now go to the burpsuite and send this request to the repeater.
+3) Now in repearter for the product id= 1 replace the 1 with ' and see the result.
+4) now we will get the database version on which the site is working select the version and paste it in site in solution.
+
+
+************************************************
+
+								Lab02: Information disclosure on debug page
+								
+This lab contains a debug page that discloses sensitive information about the application. To solve the lab, obtain and submit the SECRET_KEY environment variable. 
+
+Solution:
+
+1) In this lab we just need to start the lab.
+2) Then go to the target and select the site url and go to CGI-BIN.
+3) In CGI-BIN select the php-info and copy the url and paste it in the new tab.
+4) Now search for the secret key and paste the secret key in the solution.
+
+
+************************************************
+
+
+								Lab03: Source code disclosure via backup files
+								
+ This lab leaks its source code via backup files in a hidden directory. To solve the lab, identify and submit the database password, which is hard-coded in the leaked source code.
+
+Solution:
+
+1) In this lab we just need to open the site.
+2) then in the site url type robots.txt their we will find that there is backup file.
+3) now in the url type backup.
+4) Now open this backup file in new tab and near database postgres we will find one key.
+5) Copy that key and paste that key in the solution.
+
+*************************************************
+
+
+							Lab04: Authentication bypass via information disclosure
+								
+ This lab's administration interface has an authentication bypass vulnerability, but it is impractical to exploit without knowledge of a custom HTTP header used by the front-end.
+
+To solve the lab, obtain the header name then use it to bypass the lab's authentication. Access the admin interface and delete the user carlos.
+
+You can log in to your own account using the following credentials: wiener:peter 
+
+Solution:
+
+1) Login to the page and click on one product.
+2) Then send this request to the repeater.
+3) Now in repeater in place of GET replace it with TRACE and send the request.
+4) We will get X-Custom-Ip-Authorization: , Copy this and paste it in our regular request and send the request to repeater again.
+5) Now in X-Custom-Ip-Authorization: type 127.0.0.1 and replace TRACE with GET and then send the request.
+6) Now we are having admin panel from their copy the command used to delete user carlos and paste it in beside GET request.
+
+
+***************************************************
+
+ 
+							Lab05: Information disclosure in version control history
+							
+This lab discloses sensitive information via its version control history. To solve the lab, obtain the password for the administrator user then log in and delete the user carlos.
+
+Solution:
+
+1) This lab has the different solution.
+2) start the page and in the url type\.git.
+3) now searh for the flaw it is at the end.
+4) Copy the url of .git.
+5) Open the terminal --> go to the Desktop --> type wget -r then paste the url.
+6) now open the gitcola and commit do the undo commit we will get the admin password.
+7) copy the password go to site and login as admisnistrator and delete carlos account.
+
+***************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
