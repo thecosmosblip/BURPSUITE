@@ -1,0 +1,137 @@
+
+									FILE UPLOAD VULNERABILITY
+									
+							Lab01: Remote code execution via web shell upload
+							
+ This lab contains a vulnerable image upload function. It doesn't perform any validation on the files users upload before storing them on the server's filesystem.
+
+To solve the lab, upload a basic PHP web shell and use it to exfiltrate the contents of the file /home/carlos/secret. Submit this secret using the button provided in the lab banner.
+
+You can log in to your own account using the following credentials: wiener:peter 
+
+Solution:
+
+1) First we need to login as wiener creds.
+2) Then in my-account upload one jpeg image --> in cmd go to pictures and use command touch new.jpeg and upload this image.
+3) Then in same folder create the file test.php and open it in visual studio and enter the command --> <?php system ($_GET['cmd']);?>.
+4) Now upload this file in the same place of image section.
+5) Select the file or image and open it in new tab and type ?cmd= whoami(any command we want).
+6) Now write command cmd = cat /home/carlos/secret and copy the secret and paste it in submit solution section.
+
+
+*****************************************************************
+
+
+							Lab02: Web shell upload via Content-Type restriction bypass
+							
+ This lab contains a vulnerable image upload function. It attempts to prevent users from uploading unexpected file types, but relies on checking user-controllable input to verify this.
+
+To solve the lab, upload a basic PHP web shell and use it to exfiltrate the contents of the file /home/carlos/secret. Submit this secret using the button provided in the lab banner.
+
+You can log in to your own account using the following credentials: wiener:peter 
+
+Solution: 
+
+1) First we need to login using wieners cred.
+2) then we need to upload same php file as above.
+3) But now this site will not take php as it only allow png or jpeg.
+4) So forward this request and change the content type to image.png or jpeg and send the request.
+5) Now php file is uploaded run same command as above and copy the key and paste it in submit solution section.
+
+
+****************************************************************
+
+
+							Lab03: Web shell upload via path traversal
+							
+ This lab contains a vulnerable image upload function. The server is configured to prevent execution of user-supplied files, but this restriction can be bypassed by exploiting a secondary vulnerability.
+
+To solve the lab, upload a basic PHP web shell and use it to exfiltrate the contents of the file /home/carlos/secret. Submit this secret using the button provided in the lab banner.
+
+You can log in to your own account using the following credentials: wiener:peter 
+
+Solution:
+
+1) First we need to login using wieners creds.
+2) Now upload the same file but now we cannot get output on the site.
+3) Then send the both request one in which we uploaded the file and other executing command.
+3) Now in burpsuite in file where we have given test.php do ../test.php as it we go in previous folder than that.
+4) Just convert that into url and send request.
+5) Now in other request of executing code we need to remove avatars folder and go into files folder and run same command just change it to --> cat+/home/carlos/secret.
+6) Now copy the key and paste it in submit solution section.
+
+
+****************************************************************
+
+
+							Lab04: Web shell upload via extension blacklist bypass
+							
+ This lab contains a vulnerable image upload function. Certain file extensions are blacklisted, but this defense can be bypassed due to a fundamental flaw in the configuration of this blacklist.
+
+To solve the lab, upload a basic PHP web shell, then use it to exfiltrate the contents of the file /home/carlos/secret. Submit this secret using the button provided in the lab banner.
+
+You can log in to your own account using the following credentials: wiener:peter 
+
+Solution:
+
+1) First we need to login using wieners creds.
+2) In this lab we can't upload php files.
+3) We need to make new file with name.htaccess as website is using apache server, In file we need to write --> AddType application/x-httpd-php .test.
+4) Now we need to save the test.php as test.test file.
+5) Now first we need to upload .htaccess file and then test.test file.
+6) Now we can execute the command and get the key and submit in submit section.
+
+*******************************************************************
+
+
+							Lab05: Web shell upload via obfuscated file extension
+							
+ This lab contains a vulnerable image upload function. Certain file extensions are blacklisted, but this defense can be bypassed using a classic obfuscation technique.
+
+To solve the lab, upload a basic PHP web shell, then use it to exfiltrate the contents of the file /home/carlos/secret. Submit this secret using the button provided in the lab banner.
+
+You can log in to your own account using the following credentials: wiener:peter
+
+
+Solution:
+
+1) First we need to login using wieners cred.
+2) Then we need to upload the test.php file, but it will not get uploaded as it is blocked.
+3) Only png and jpg files are allowed, so we need to send the request of file upload to repeater.
+4) In the repeater we need to change the filename from test.php to test.php%00.png and send the request.
+5) Now we need to go back to the home and inspect the page and check the file location which is files/avatars/test.php.
+6) Go to above location and use the command get the output and submit it in submit section.
+
+
+*********************************************************************
+
+
+							Lab06: Remote code execution via polyglot web shell upload
+							
+ This lab contains a vulnerable image upload function. Although it checks the contents of the file to verify that it is a genuine image, it is still possible to upload and execute server-side code.
+
+To solve the lab, upload a basic PHP web shell, then use it to exfiltrate the contents of the file /home/carlos/secret. Submit this secret using the button provided in the lab banner.
+
+You can log in to your own account using the following credentials: wiener:peter 
+
+Solution:
+
+1) First we need to login using wieners creds.
+2) Now we need to create new file test.php and write new code --> <?php echo file_put_contents('/home/carlos/secret'); ?> and upload it in site.
+3) But it will not take php file.
+4) Now we need to open new terminal and write a command to make polygot file --> exiftool -comment="<?php echo 'START' . file_get_contents('/home/carlos/secret'). 'END' ; ?>" 676494.jpg -o polygot.php.
+5) Now for this we need one image in same folder and upload the polygot file which gets created in the site.
+6) Now we need to search for the START and copy the letters from START to END and submit it in submit section.
+
+
+*************************************************************************
+
+
+
+
+
+
+
+
+
+					
