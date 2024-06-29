@@ -1,0 +1,115 @@
+
+
+								Lab01: Basic SSRF against the local server
+								
+This lab has a stock check feature which fetches data from an internal system.
+
+To solve the lab, change the stock check URL to access the admin interface at http://localhost/admin and delete the user carlos. 
+
+Solution: 
+
+1) We dont need to login in this lab.
+2) First we need to ON the intercept and select one product and check stock and send the request to repeater.
+3) Then we need to change the stockApi to http://localhost to check whether it is running in backgroung localhost.
+4) In the localhost host URL we can find admin panel, now we need to search for the admin in raw response.
+5) Now after we searched admin we need to copy href and paste in front of localhost like stockApi=http://localhost/admin.
+6) Now we need to search for user carlos and copy his href to delete him and paste in front of above link like stockApi=http://localhost/admin/delete?username=carlos.
+7) Now go back to stockApi=http://localhost/admin and see if carlos is deleted or Not.
+
+
+***************************************************************
+
+
+								Lab02: Basic SSRF against another back-end system
+								
+ This lab has a stock check feature which fetches data from an internal system.
+
+To solve the lab, use the stock check functionality to scan the internal 192.168.0.X range for an admin interface on port 8080, then use it to delete the user carlos. 
+
+Solution:
+
+1) For this lab also we dont need to login with user creds.
+2) Now we need to send the check stock request to the repeater.
+3) In the stockAPi there is link with IP address so we need to check which address is working.
+4) So we need to check from 192.168.0.1 to 192.168.0.255 for the output.
+5) Now we have to send the request to repeater and add $ to 1 in IP address and in payload select --> Numbers --> From 1 to 255 step 1 and start Attack.
+6) Now where we get difference response take that IP address and in front of it add /admin.
+7) Here we found 138 was used to login to admin site, so we used --> stockApi=http://192.168.0.138:8080/admin.
+8) Now we need to search for user carlos and copy his href to delete him and paste in front of above link like stockApi=http://localhost/admin/delete?username=carlos.
+9) Now go back to stockApi=http://localhost/admin and see if carlos is deleted or Not.
+
+
+***************************************************************
+
+
+								Lab03: SSRF with blacklist-based input filter
+								
+ This lab has a stock check feature which fetches data from an internal system.
+
+To solve the lab, change the stock check URL to access the admin interface at http://localhost/admin and delete the user carlos.
+
+The developer has deployed two weak anti-SSRF defenses that you will need to bypass. 
+
+Solution:
+
+1) We dont need to login using user creds for this lab.
+2) Now we need to send the check stock request to the repeater.
+3) Now in the stockApi change the address to http://120.1/ i.e. it ignores 0.0 and we can enter the site vulnerably.
+4) Now we need to search for and admin and paste his href, but it will not work, so we need to url encode the a from admin multiple times till we get 200 request.
+5) For url encode we need to select a and right click --> convert Selection --> URL --> all characters.
+6) Now we need to search for carlos and paste href of carlos and send request and follow redirection.
+7) Now we need to again go back to admin and see if carlos is deleted or Not.
+
+
+****************************************************************
+
+
+								Lab04: SSRF with whitelist-based input filter
+								
+ This lab has a stock check feature which fetches data from an internal system.
+
+To solve the lab, change the stock check URL to access the admin interface at http://localhost/admin and delete the user carlos.
+
+The developer has deployed an anti-SSRF defense you will need to bypass. 
+
+Solution:
+
+1) We dont need to login using users cred.
+2) Now we need login send the check stock request to the repeater.
+3) Now in the repeater we need to work on stockApi alot as this is EXPERT level Lab.
+4) In the stockApi we need to enter --> stockApi=http://localhost%2523@stock.weliketoshop.net to login in the admin panel.
+5) Now we need to do same process as above of searching admin then pasting href and then same for carlos deletion.
+6) In the end we need to check in admin-panel again that user carlos is deleted or Not.
+
+
+*****************************************************************
+
+
+							Lab05: SSRF with filter bypass via open redirection vulnerability
+							
+ This lab has a stock check feature which fetches data from an internal system.
+
+To solve the lab, change the stock check URL to access the admin interface at http://192.168.0.12:8080/admin and delete the user carlos.
+
+The stock checker has been restricted to only access the local application, so you will need to find an open redirect affecting the application first. 
+
+Solution:
+
+1) For this Lab we dont need to login using user creds.
+2) First we need to send the check stock request to repeater and then there is another functionality also in this lab for next product, send that request also to repeater.
+3) Now we got to know that check stock request is not vulnerable so we need to check for next product request.
+4) The 2nd request is vulnerbale so we copy the GET request i.e. /product/nextProduct?currentProductId=1&path=https://www.google.com and paste in front of stockApi --> 
+
+stockApi=/product/nextProduct%3fcurrentProductId%3d1%26path%3dhttp%3a//192.168.0.12%3a8080/admin using ctrl+u.
+5) Now we need to follow same thing from previous labs searching carlos href and deleting him and again checking him in admin-panel.
+
+
+*********************************************************************
+
+
+
+
+
+
+
+					
